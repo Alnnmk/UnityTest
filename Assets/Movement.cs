@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Movement : MonoBehaviour
 {
@@ -12,8 +14,9 @@ public class Movement : MonoBehaviour
     private bool isMoving = false;
     private bool isSprinting = false;
     private float yRot;
-
+    private float currentspeed;
     private Rigidbody rigidBody;
+    public Text yourspeed;
 
     // Use this for initialization
     void Start()
@@ -39,12 +42,15 @@ public class Movement : MonoBehaviour
             //transform.Translate(Vector3.right * Input.GetAxis("Horizontal") * playerSpeed);
             rigidBody.velocity += transform.right * Input.GetAxisRaw("Horizontal") * playerSpeed;
             isMoving = true;
+            currentspeed = rigidBody.velocity.magnitude;
+            
         }
         if (Input.GetAxisRaw("Vertical") > 0.5f || Input.GetAxisRaw("Vertical") < -0.5f)
         {
             //transform.Translate(Vector3.forward * Input.GetAxis("Vertical") * playerSpeed);
             rigidBody.velocity += transform.forward * Input.GetAxisRaw("Vertical") * playerSpeed;
             isMoving = true;
+           
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -52,6 +58,6 @@ public class Movement : MonoBehaviour
             rigidBody.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
         }
 
-
+        yourspeed.text = (rigidBody.velocity) + "km/h";
     }
 }
