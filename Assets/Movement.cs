@@ -17,6 +17,7 @@ public class Movement : MonoBehaviour
     private float currentspeed;
     private Rigidbody rigidBody;
     public Text yourspeed;
+    private bool isGround = true;
 
     // Use this for initialization
     void Start()
@@ -42,7 +43,7 @@ public class Movement : MonoBehaviour
             //transform.Translate(Vector3.right * Input.GetAxis("Horizontal") * playerSpeed);
             rigidBody.velocity += transform.right * Input.GetAxisRaw("Horizontal") * playerSpeed;
             isMoving = true;
-            currentspeed = rigidBody.velocity.magnitude;
+            
             
         }
         if (Input.GetAxisRaw("Vertical") > 0.5f || Input.GetAxisRaw("Vertical") < -0.5f)
@@ -50,14 +51,22 @@ public class Movement : MonoBehaviour
             //transform.Translate(Vector3.forward * Input.GetAxis("Vertical") * playerSpeed);
             rigidBody.velocity += transform.forward * Input.GetAxisRaw("Vertical") * playerSpeed;
             isMoving = true;
-           
+            yourspeed.text = rigidBody.velocity + "km/h ";
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && isGround == true)
         {
             rigidBody.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+            isGround = false;
         }
-
+        
         yourspeed.text = (rigidBody.velocity) + "km/h";
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "ground")
+        {
+            isGround = true;
+        }
     }
 }
